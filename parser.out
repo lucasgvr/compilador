@@ -1,1384 +1,736 @@
 Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 
+Unused terminals:
+
+    AND
+    EQ
+    GE
+    GT
+    LE
+    LT
+    NEQ
+    OR
+
 Grammar
 
-Rule 0     S' -> statement
-Rule 1     statement -> ID ASSIGN expression SEMICOLON
-Rule 2     statement -> IF LPAREN expression RPAREN SCOPE statements SCOPE
-Rule 3     statements -> statement
-Rule 4     statements -> statements statement
-Rule 5     expression -> expression PLUS expression
-Rule 6     expression -> expression MINUS expression
-Rule 7     expression -> expression TIMES expression
-Rule 8     expression -> expression DIVIDE expression
-Rule 9     expression -> expression EQ expression
-Rule 10    expression -> expression NEQ expression
-Rule 11    expression -> expression LE expression
-Rule 12    expression -> expression GE expression
-Rule 13    expression -> expression LT expression
-Rule 14    expression -> expression GT expression
-Rule 15    expression -> expression AND expression
-Rule 16    expression -> expression OR expression
-Rule 17    expression -> MINUS expression
-Rule 18    expression -> LPAREN expression RPAREN
-Rule 19    expression -> ID
-Rule 20    expression -> INT
-Rule 21    expression -> BOOL
+Rule 0     S' -> program
+Rule 1     program -> statements
+Rule 2     statements -> statement statements
+Rule 3     statements -> empty
+Rule 4     statement -> assignment
+Rule 5     statement -> if_statement
+Rule 6     statement -> while_statement
+Rule 7     assignment -> ID ASSIGN expression SEMICOLON
+Rule 8     if_statement -> IF LPAREN expression RPAREN SCOPE statements SCOPE else_block
+Rule 9     else_block -> ELSE SCOPE statements SCOPE
+Rule 10    else_block -> empty
+Rule 11    while_statement -> WHILE LPAREN expression RPAREN SCOPE statements SCOPE
+Rule 12    expression -> expression PLUS term
+Rule 13    expression -> expression MINUS term
+Rule 14    expression -> term
+Rule 15    term -> term TIMES factor
+Rule 16    term -> term DIVIDE factor
+Rule 17    term -> factor
+Rule 18    factor -> INT
+Rule 19    factor -> BOOL
+Rule 20    factor -> ID
+Rule 21    factor -> LPAREN expression RPAREN
+Rule 22    empty -> <empty>
 
 Terminals, with rules where they appear
 
-AND                  : 15
-ASSIGN               : 1
-BOOL                 : 21
-DIVIDE               : 8
-EQ                   : 9
-GE                   : 12
-GT                   : 14
-ID                   : 1 19
-IF                   : 2
-INT                  : 20
-LE                   : 11
-LPAREN               : 2 18
-LT                   : 13
-MINUS                : 6 17
-NEQ                  : 10
-OR                   : 16
-PLUS                 : 5
-RPAREN               : 2 18
-SCOPE                : 2 2
-SEMICOLON            : 1
-TIMES                : 7
+AND                  : 
+ASSIGN               : 7
+BOOL                 : 19
+DIVIDE               : 16
+ELSE                 : 9
+EQ                   : 
+GE                   : 
+GT                   : 
+ID                   : 7 20
+IF                   : 8
+INT                  : 18
+LE                   : 
+LPAREN               : 8 11 21
+LT                   : 
+MINUS                : 13
+NEQ                  : 
+OR                   : 
+PLUS                 : 12
+RPAREN               : 8 11 21
+SCOPE                : 8 8 9 9 11 11
+SEMICOLON            : 7
+TIMES                : 15
+WHILE                : 11
 error                : 
 
 Nonterminals, with rules where they appear
 
-expression           : 1 2 5 5 6 6 7 7 8 8 9 9 10 10 11 11 12 12 13 13 14 14 15 15 16 16 17 18
-statement            : 3 4 0
-statements           : 2 4
+assignment           : 4
+else_block           : 8
+empty                : 3 10
+expression           : 7 8 11 12 13 21
+factor               : 15 16 17
+if_statement         : 5
+program              : 0
+statement            : 2
+statements           : 1 2 8 9 11
+term                 : 12 13 14 15 16
+while_statement      : 6
 
 Parsing method: LALR
 
 state 0
 
-    (0) S' -> . statement
-    (1) statement -> . ID ASSIGN expression SEMICOLON
-    (2) statement -> . IF LPAREN expression RPAREN SCOPE statements SCOPE
+    (0) S' -> . program
+    (1) program -> . statements
+    (2) statements -> . statement statements
+    (3) statements -> . empty
+    (4) statement -> . assignment
+    (5) statement -> . if_statement
+    (6) statement -> . while_statement
+    (22) empty -> .
+    (7) assignment -> . ID ASSIGN expression SEMICOLON
+    (8) if_statement -> . IF LPAREN expression RPAREN SCOPE statements SCOPE else_block
+    (11) while_statement -> . WHILE LPAREN expression RPAREN SCOPE statements SCOPE
 
-    ID              shift and go to state 2
-    IF              shift and go to state 3
+    $end            reduce using rule 22 (empty -> .)
+    ID              shift and go to state 8
+    IF              shift and go to state 9
+    WHILE           shift and go to state 10
 
-    statement                      shift and go to state 1
+    program                        shift and go to state 1
+    statements                     shift and go to state 2
+    statement                      shift and go to state 3
+    empty                          shift and go to state 4
+    assignment                     shift and go to state 5
+    if_statement                   shift and go to state 6
+    while_statement                shift and go to state 7
 
 state 1
 
-    (0) S' -> statement .
+    (0) S' -> program .
 
 
 
 state 2
 
-    (1) statement -> ID . ASSIGN expression SEMICOLON
+    (1) program -> statements .
 
-    ASSIGN          shift and go to state 4
+    $end            reduce using rule 1 (program -> statements .)
 
 
 state 3
 
-    (2) statement -> IF . LPAREN expression RPAREN SCOPE statements SCOPE
+    (2) statements -> statement . statements
+    (2) statements -> . statement statements
+    (3) statements -> . empty
+    (4) statement -> . assignment
+    (5) statement -> . if_statement
+    (6) statement -> . while_statement
+    (22) empty -> .
+    (7) assignment -> . ID ASSIGN expression SEMICOLON
+    (8) if_statement -> . IF LPAREN expression RPAREN SCOPE statements SCOPE else_block
+    (11) while_statement -> . WHILE LPAREN expression RPAREN SCOPE statements SCOPE
 
-    LPAREN          shift and go to state 5
+    $end            reduce using rule 22 (empty -> .)
+    SCOPE           reduce using rule 22 (empty -> .)
+    ID              shift and go to state 8
+    IF              shift and go to state 9
+    WHILE           shift and go to state 10
 
+    statement                      shift and go to state 3
+    statements                     shift and go to state 11
+    empty                          shift and go to state 4
+    assignment                     shift and go to state 5
+    if_statement                   shift and go to state 6
+    while_statement                shift and go to state 7
 
 state 4
 
-    (1) statement -> ID ASSIGN . expression SEMICOLON
-    (5) expression -> . expression PLUS expression
-    (6) expression -> . expression MINUS expression
-    (7) expression -> . expression TIMES expression
-    (8) expression -> . expression DIVIDE expression
-    (9) expression -> . expression EQ expression
-    (10) expression -> . expression NEQ expression
-    (11) expression -> . expression LE expression
-    (12) expression -> . expression GE expression
-    (13) expression -> . expression LT expression
-    (14) expression -> . expression GT expression
-    (15) expression -> . expression AND expression
-    (16) expression -> . expression OR expression
-    (17) expression -> . MINUS expression
-    (18) expression -> . LPAREN expression RPAREN
-    (19) expression -> . ID
-    (20) expression -> . INT
-    (21) expression -> . BOOL
+    (3) statements -> empty .
 
-    MINUS           shift and go to state 8
-    LPAREN          shift and go to state 9
-    ID              shift and go to state 6
-    INT             shift and go to state 10
-    BOOL            shift and go to state 11
+    $end            reduce using rule 3 (statements -> empty .)
+    SCOPE           reduce using rule 3 (statements -> empty .)
 
-    expression                     shift and go to state 7
 
 state 5
 
-    (2) statement -> IF LPAREN . expression RPAREN SCOPE statements SCOPE
-    (5) expression -> . expression PLUS expression
-    (6) expression -> . expression MINUS expression
-    (7) expression -> . expression TIMES expression
-    (8) expression -> . expression DIVIDE expression
-    (9) expression -> . expression EQ expression
-    (10) expression -> . expression NEQ expression
-    (11) expression -> . expression LE expression
-    (12) expression -> . expression GE expression
-    (13) expression -> . expression LT expression
-    (14) expression -> . expression GT expression
-    (15) expression -> . expression AND expression
-    (16) expression -> . expression OR expression
-    (17) expression -> . MINUS expression
-    (18) expression -> . LPAREN expression RPAREN
-    (19) expression -> . ID
-    (20) expression -> . INT
-    (21) expression -> . BOOL
+    (4) statement -> assignment .
 
-    MINUS           shift and go to state 8
-    LPAREN          shift and go to state 9
-    ID              shift and go to state 6
-    INT             shift and go to state 10
-    BOOL            shift and go to state 11
+    ID              reduce using rule 4 (statement -> assignment .)
+    IF              reduce using rule 4 (statement -> assignment .)
+    WHILE           reduce using rule 4 (statement -> assignment .)
+    $end            reduce using rule 4 (statement -> assignment .)
+    SCOPE           reduce using rule 4 (statement -> assignment .)
 
-    expression                     shift and go to state 12
 
 state 6
 
-    (19) expression -> ID .
+    (5) statement -> if_statement .
 
-    SEMICOLON       reduce using rule 19 (expression -> ID .)
-    PLUS            reduce using rule 19 (expression -> ID .)
-    MINUS           reduce using rule 19 (expression -> ID .)
-    TIMES           reduce using rule 19 (expression -> ID .)
-    DIVIDE          reduce using rule 19 (expression -> ID .)
-    EQ              reduce using rule 19 (expression -> ID .)
-    NEQ             reduce using rule 19 (expression -> ID .)
-    LE              reduce using rule 19 (expression -> ID .)
-    GE              reduce using rule 19 (expression -> ID .)
-    LT              reduce using rule 19 (expression -> ID .)
-    GT              reduce using rule 19 (expression -> ID .)
-    AND             reduce using rule 19 (expression -> ID .)
-    OR              reduce using rule 19 (expression -> ID .)
-    RPAREN          reduce using rule 19 (expression -> ID .)
+    ID              reduce using rule 5 (statement -> if_statement .)
+    IF              reduce using rule 5 (statement -> if_statement .)
+    WHILE           reduce using rule 5 (statement -> if_statement .)
+    $end            reduce using rule 5 (statement -> if_statement .)
+    SCOPE           reduce using rule 5 (statement -> if_statement .)
 
 
 state 7
 
-    (1) statement -> ID ASSIGN expression . SEMICOLON
-    (5) expression -> expression . PLUS expression
-    (6) expression -> expression . MINUS expression
-    (7) expression -> expression . TIMES expression
-    (8) expression -> expression . DIVIDE expression
-    (9) expression -> expression . EQ expression
-    (10) expression -> expression . NEQ expression
-    (11) expression -> expression . LE expression
-    (12) expression -> expression . GE expression
-    (13) expression -> expression . LT expression
-    (14) expression -> expression . GT expression
-    (15) expression -> expression . AND expression
-    (16) expression -> expression . OR expression
+    (6) statement -> while_statement .
 
-    SEMICOLON       shift and go to state 13
-    PLUS            shift and go to state 14
-    MINUS           shift and go to state 15
-    TIMES           shift and go to state 16
-    DIVIDE          shift and go to state 17
-    EQ              shift and go to state 18
-    NEQ             shift and go to state 19
-    LE              shift and go to state 20
-    GE              shift and go to state 21
-    LT              shift and go to state 22
-    GT              shift and go to state 23
-    AND             shift and go to state 24
-    OR              shift and go to state 25
+    ID              reduce using rule 6 (statement -> while_statement .)
+    IF              reduce using rule 6 (statement -> while_statement .)
+    WHILE           reduce using rule 6 (statement -> while_statement .)
+    $end            reduce using rule 6 (statement -> while_statement .)
+    SCOPE           reduce using rule 6 (statement -> while_statement .)
 
 
 state 8
 
-    (17) expression -> MINUS . expression
-    (5) expression -> . expression PLUS expression
-    (6) expression -> . expression MINUS expression
-    (7) expression -> . expression TIMES expression
-    (8) expression -> . expression DIVIDE expression
-    (9) expression -> . expression EQ expression
-    (10) expression -> . expression NEQ expression
-    (11) expression -> . expression LE expression
-    (12) expression -> . expression GE expression
-    (13) expression -> . expression LT expression
-    (14) expression -> . expression GT expression
-    (15) expression -> . expression AND expression
-    (16) expression -> . expression OR expression
-    (17) expression -> . MINUS expression
-    (18) expression -> . LPAREN expression RPAREN
-    (19) expression -> . ID
-    (20) expression -> . INT
-    (21) expression -> . BOOL
+    (7) assignment -> ID . ASSIGN expression SEMICOLON
 
-    MINUS           shift and go to state 8
-    LPAREN          shift and go to state 9
-    ID              shift and go to state 6
-    INT             shift and go to state 10
-    BOOL            shift and go to state 11
+    ASSIGN          shift and go to state 12
 
-    expression                     shift and go to state 26
 
 state 9
 
-    (18) expression -> LPAREN . expression RPAREN
-    (5) expression -> . expression PLUS expression
-    (6) expression -> . expression MINUS expression
-    (7) expression -> . expression TIMES expression
-    (8) expression -> . expression DIVIDE expression
-    (9) expression -> . expression EQ expression
-    (10) expression -> . expression NEQ expression
-    (11) expression -> . expression LE expression
-    (12) expression -> . expression GE expression
-    (13) expression -> . expression LT expression
-    (14) expression -> . expression GT expression
-    (15) expression -> . expression AND expression
-    (16) expression -> . expression OR expression
-    (17) expression -> . MINUS expression
-    (18) expression -> . LPAREN expression RPAREN
-    (19) expression -> . ID
-    (20) expression -> . INT
-    (21) expression -> . BOOL
+    (8) if_statement -> IF . LPAREN expression RPAREN SCOPE statements SCOPE else_block
 
-    MINUS           shift and go to state 8
-    LPAREN          shift and go to state 9
-    ID              shift and go to state 6
-    INT             shift and go to state 10
-    BOOL            shift and go to state 11
+    LPAREN          shift and go to state 13
 
-    expression                     shift and go to state 27
 
 state 10
 
-    (20) expression -> INT .
+    (11) while_statement -> WHILE . LPAREN expression RPAREN SCOPE statements SCOPE
 
-    SEMICOLON       reduce using rule 20 (expression -> INT .)
-    PLUS            reduce using rule 20 (expression -> INT .)
-    MINUS           reduce using rule 20 (expression -> INT .)
-    TIMES           reduce using rule 20 (expression -> INT .)
-    DIVIDE          reduce using rule 20 (expression -> INT .)
-    EQ              reduce using rule 20 (expression -> INT .)
-    NEQ             reduce using rule 20 (expression -> INT .)
-    LE              reduce using rule 20 (expression -> INT .)
-    GE              reduce using rule 20 (expression -> INT .)
-    LT              reduce using rule 20 (expression -> INT .)
-    GT              reduce using rule 20 (expression -> INT .)
-    AND             reduce using rule 20 (expression -> INT .)
-    OR              reduce using rule 20 (expression -> INT .)
-    RPAREN          reduce using rule 20 (expression -> INT .)
+    LPAREN          shift and go to state 14
 
 
 state 11
 
-    (21) expression -> BOOL .
+    (2) statements -> statement statements .
 
-    SEMICOLON       reduce using rule 21 (expression -> BOOL .)
-    PLUS            reduce using rule 21 (expression -> BOOL .)
-    MINUS           reduce using rule 21 (expression -> BOOL .)
-    TIMES           reduce using rule 21 (expression -> BOOL .)
-    DIVIDE          reduce using rule 21 (expression -> BOOL .)
-    EQ              reduce using rule 21 (expression -> BOOL .)
-    NEQ             reduce using rule 21 (expression -> BOOL .)
-    LE              reduce using rule 21 (expression -> BOOL .)
-    GE              reduce using rule 21 (expression -> BOOL .)
-    LT              reduce using rule 21 (expression -> BOOL .)
-    GT              reduce using rule 21 (expression -> BOOL .)
-    AND             reduce using rule 21 (expression -> BOOL .)
-    OR              reduce using rule 21 (expression -> BOOL .)
-    RPAREN          reduce using rule 21 (expression -> BOOL .)
+    $end            reduce using rule 2 (statements -> statement statements .)
+    SCOPE           reduce using rule 2 (statements -> statement statements .)
 
 
 state 12
 
-    (2) statement -> IF LPAREN expression . RPAREN SCOPE statements SCOPE
-    (5) expression -> expression . PLUS expression
-    (6) expression -> expression . MINUS expression
-    (7) expression -> expression . TIMES expression
-    (8) expression -> expression . DIVIDE expression
-    (9) expression -> expression . EQ expression
-    (10) expression -> expression . NEQ expression
-    (11) expression -> expression . LE expression
-    (12) expression -> expression . GE expression
-    (13) expression -> expression . LT expression
-    (14) expression -> expression . GT expression
-    (15) expression -> expression . AND expression
-    (16) expression -> expression . OR expression
+    (7) assignment -> ID ASSIGN . expression SEMICOLON
+    (12) expression -> . expression PLUS term
+    (13) expression -> . expression MINUS term
+    (14) expression -> . term
+    (15) term -> . term TIMES factor
+    (16) term -> . term DIVIDE factor
+    (17) term -> . factor
+    (18) factor -> . INT
+    (19) factor -> . BOOL
+    (20) factor -> . ID
+    (21) factor -> . LPAREN expression RPAREN
 
-    RPAREN          shift and go to state 28
-    PLUS            shift and go to state 14
-    MINUS           shift and go to state 15
-    TIMES           shift and go to state 16
-    DIVIDE          shift and go to state 17
-    EQ              shift and go to state 18
-    NEQ             shift and go to state 19
-    LE              shift and go to state 20
-    GE              shift and go to state 21
-    LT              shift and go to state 22
-    GT              shift and go to state 23
-    AND             shift and go to state 24
-    OR              shift and go to state 25
+    INT             shift and go to state 19
+    BOOL            shift and go to state 20
+    ID              shift and go to state 15
+    LPAREN          shift and go to state 21
 
+    expression                     shift and go to state 16
+    term                           shift and go to state 17
+    factor                         shift and go to state 18
 
 state 13
 
-    (1) statement -> ID ASSIGN expression SEMICOLON .
+    (8) if_statement -> IF LPAREN . expression RPAREN SCOPE statements SCOPE else_block
+    (12) expression -> . expression PLUS term
+    (13) expression -> . expression MINUS term
+    (14) expression -> . term
+    (15) term -> . term TIMES factor
+    (16) term -> . term DIVIDE factor
+    (17) term -> . factor
+    (18) factor -> . INT
+    (19) factor -> . BOOL
+    (20) factor -> . ID
+    (21) factor -> . LPAREN expression RPAREN
 
-    $end            reduce using rule 1 (statement -> ID ASSIGN expression SEMICOLON .)
-    SCOPE           reduce using rule 1 (statement -> ID ASSIGN expression SEMICOLON .)
-    ID              reduce using rule 1 (statement -> ID ASSIGN expression SEMICOLON .)
-    IF              reduce using rule 1 (statement -> ID ASSIGN expression SEMICOLON .)
+    INT             shift and go to state 19
+    BOOL            shift and go to state 20
+    ID              shift and go to state 15
+    LPAREN          shift and go to state 21
 
+    expression                     shift and go to state 22
+    term                           shift and go to state 17
+    factor                         shift and go to state 18
 
 state 14
 
-    (5) expression -> expression PLUS . expression
-    (5) expression -> . expression PLUS expression
-    (6) expression -> . expression MINUS expression
-    (7) expression -> . expression TIMES expression
-    (8) expression -> . expression DIVIDE expression
-    (9) expression -> . expression EQ expression
-    (10) expression -> . expression NEQ expression
-    (11) expression -> . expression LE expression
-    (12) expression -> . expression GE expression
-    (13) expression -> . expression LT expression
-    (14) expression -> . expression GT expression
-    (15) expression -> . expression AND expression
-    (16) expression -> . expression OR expression
-    (17) expression -> . MINUS expression
-    (18) expression -> . LPAREN expression RPAREN
-    (19) expression -> . ID
-    (20) expression -> . INT
-    (21) expression -> . BOOL
+    (11) while_statement -> WHILE LPAREN . expression RPAREN SCOPE statements SCOPE
+    (12) expression -> . expression PLUS term
+    (13) expression -> . expression MINUS term
+    (14) expression -> . term
+    (15) term -> . term TIMES factor
+    (16) term -> . term DIVIDE factor
+    (17) term -> . factor
+    (18) factor -> . INT
+    (19) factor -> . BOOL
+    (20) factor -> . ID
+    (21) factor -> . LPAREN expression RPAREN
 
-    MINUS           shift and go to state 8
-    LPAREN          shift and go to state 9
-    ID              shift and go to state 6
-    INT             shift and go to state 10
-    BOOL            shift and go to state 11
+    INT             shift and go to state 19
+    BOOL            shift and go to state 20
+    ID              shift and go to state 15
+    LPAREN          shift and go to state 21
 
-    expression                     shift and go to state 29
+    expression                     shift and go to state 23
+    term                           shift and go to state 17
+    factor                         shift and go to state 18
 
 state 15
 
-    (6) expression -> expression MINUS . expression
-    (5) expression -> . expression PLUS expression
-    (6) expression -> . expression MINUS expression
-    (7) expression -> . expression TIMES expression
-    (8) expression -> . expression DIVIDE expression
-    (9) expression -> . expression EQ expression
-    (10) expression -> . expression NEQ expression
-    (11) expression -> . expression LE expression
-    (12) expression -> . expression GE expression
-    (13) expression -> . expression LT expression
-    (14) expression -> . expression GT expression
-    (15) expression -> . expression AND expression
-    (16) expression -> . expression OR expression
-    (17) expression -> . MINUS expression
-    (18) expression -> . LPAREN expression RPAREN
-    (19) expression -> . ID
-    (20) expression -> . INT
-    (21) expression -> . BOOL
+    (20) factor -> ID .
 
-    MINUS           shift and go to state 8
-    LPAREN          shift and go to state 9
-    ID              shift and go to state 6
-    INT             shift and go to state 10
-    BOOL            shift and go to state 11
+    TIMES           reduce using rule 20 (factor -> ID .)
+    DIVIDE          reduce using rule 20 (factor -> ID .)
+    SEMICOLON       reduce using rule 20 (factor -> ID .)
+    PLUS            reduce using rule 20 (factor -> ID .)
+    MINUS           reduce using rule 20 (factor -> ID .)
+    RPAREN          reduce using rule 20 (factor -> ID .)
 
-    expression                     shift and go to state 30
 
 state 16
 
-    (7) expression -> expression TIMES . expression
-    (5) expression -> . expression PLUS expression
-    (6) expression -> . expression MINUS expression
-    (7) expression -> . expression TIMES expression
-    (8) expression -> . expression DIVIDE expression
-    (9) expression -> . expression EQ expression
-    (10) expression -> . expression NEQ expression
-    (11) expression -> . expression LE expression
-    (12) expression -> . expression GE expression
-    (13) expression -> . expression LT expression
-    (14) expression -> . expression GT expression
-    (15) expression -> . expression AND expression
-    (16) expression -> . expression OR expression
-    (17) expression -> . MINUS expression
-    (18) expression -> . LPAREN expression RPAREN
-    (19) expression -> . ID
-    (20) expression -> . INT
-    (21) expression -> . BOOL
+    (7) assignment -> ID ASSIGN expression . SEMICOLON
+    (12) expression -> expression . PLUS term
+    (13) expression -> expression . MINUS term
 
-    MINUS           shift and go to state 8
-    LPAREN          shift and go to state 9
-    ID              shift and go to state 6
-    INT             shift and go to state 10
-    BOOL            shift and go to state 11
+    SEMICOLON       shift and go to state 24
+    PLUS            shift and go to state 25
+    MINUS           shift and go to state 26
 
-    expression                     shift and go to state 31
 
 state 17
 
-    (8) expression -> expression DIVIDE . expression
-    (5) expression -> . expression PLUS expression
-    (6) expression -> . expression MINUS expression
-    (7) expression -> . expression TIMES expression
-    (8) expression -> . expression DIVIDE expression
-    (9) expression -> . expression EQ expression
-    (10) expression -> . expression NEQ expression
-    (11) expression -> . expression LE expression
-    (12) expression -> . expression GE expression
-    (13) expression -> . expression LT expression
-    (14) expression -> . expression GT expression
-    (15) expression -> . expression AND expression
-    (16) expression -> . expression OR expression
-    (17) expression -> . MINUS expression
-    (18) expression -> . LPAREN expression RPAREN
-    (19) expression -> . ID
-    (20) expression -> . INT
-    (21) expression -> . BOOL
+    (14) expression -> term .
+    (15) term -> term . TIMES factor
+    (16) term -> term . DIVIDE factor
 
-    MINUS           shift and go to state 8
-    LPAREN          shift and go to state 9
-    ID              shift and go to state 6
-    INT             shift and go to state 10
-    BOOL            shift and go to state 11
+    SEMICOLON       reduce using rule 14 (expression -> term .)
+    PLUS            reduce using rule 14 (expression -> term .)
+    MINUS           reduce using rule 14 (expression -> term .)
+    RPAREN          reduce using rule 14 (expression -> term .)
+    TIMES           shift and go to state 27
+    DIVIDE          shift and go to state 28
 
-    expression                     shift and go to state 32
 
 state 18
 
-    (9) expression -> expression EQ . expression
-    (5) expression -> . expression PLUS expression
-    (6) expression -> . expression MINUS expression
-    (7) expression -> . expression TIMES expression
-    (8) expression -> . expression DIVIDE expression
-    (9) expression -> . expression EQ expression
-    (10) expression -> . expression NEQ expression
-    (11) expression -> . expression LE expression
-    (12) expression -> . expression GE expression
-    (13) expression -> . expression LT expression
-    (14) expression -> . expression GT expression
-    (15) expression -> . expression AND expression
-    (16) expression -> . expression OR expression
-    (17) expression -> . MINUS expression
-    (18) expression -> . LPAREN expression RPAREN
-    (19) expression -> . ID
-    (20) expression -> . INT
-    (21) expression -> . BOOL
+    (17) term -> factor .
 
-    MINUS           shift and go to state 8
-    LPAREN          shift and go to state 9
-    ID              shift and go to state 6
-    INT             shift and go to state 10
-    BOOL            shift and go to state 11
+    TIMES           reduce using rule 17 (term -> factor .)
+    DIVIDE          reduce using rule 17 (term -> factor .)
+    SEMICOLON       reduce using rule 17 (term -> factor .)
+    PLUS            reduce using rule 17 (term -> factor .)
+    MINUS           reduce using rule 17 (term -> factor .)
+    RPAREN          reduce using rule 17 (term -> factor .)
 
-    expression                     shift and go to state 33
 
 state 19
 
-    (10) expression -> expression NEQ . expression
-    (5) expression -> . expression PLUS expression
-    (6) expression -> . expression MINUS expression
-    (7) expression -> . expression TIMES expression
-    (8) expression -> . expression DIVIDE expression
-    (9) expression -> . expression EQ expression
-    (10) expression -> . expression NEQ expression
-    (11) expression -> . expression LE expression
-    (12) expression -> . expression GE expression
-    (13) expression -> . expression LT expression
-    (14) expression -> . expression GT expression
-    (15) expression -> . expression AND expression
-    (16) expression -> . expression OR expression
-    (17) expression -> . MINUS expression
-    (18) expression -> . LPAREN expression RPAREN
-    (19) expression -> . ID
-    (20) expression -> . INT
-    (21) expression -> . BOOL
+    (18) factor -> INT .
 
-    MINUS           shift and go to state 8
-    LPAREN          shift and go to state 9
-    ID              shift and go to state 6
-    INT             shift and go to state 10
-    BOOL            shift and go to state 11
+    TIMES           reduce using rule 18 (factor -> INT .)
+    DIVIDE          reduce using rule 18 (factor -> INT .)
+    SEMICOLON       reduce using rule 18 (factor -> INT .)
+    PLUS            reduce using rule 18 (factor -> INT .)
+    MINUS           reduce using rule 18 (factor -> INT .)
+    RPAREN          reduce using rule 18 (factor -> INT .)
 
-    expression                     shift and go to state 34
 
 state 20
 
-    (11) expression -> expression LE . expression
-    (5) expression -> . expression PLUS expression
-    (6) expression -> . expression MINUS expression
-    (7) expression -> . expression TIMES expression
-    (8) expression -> . expression DIVIDE expression
-    (9) expression -> . expression EQ expression
-    (10) expression -> . expression NEQ expression
-    (11) expression -> . expression LE expression
-    (12) expression -> . expression GE expression
-    (13) expression -> . expression LT expression
-    (14) expression -> . expression GT expression
-    (15) expression -> . expression AND expression
-    (16) expression -> . expression OR expression
-    (17) expression -> . MINUS expression
-    (18) expression -> . LPAREN expression RPAREN
-    (19) expression -> . ID
-    (20) expression -> . INT
-    (21) expression -> . BOOL
+    (19) factor -> BOOL .
 
-    MINUS           shift and go to state 8
-    LPAREN          shift and go to state 9
-    ID              shift and go to state 6
-    INT             shift and go to state 10
-    BOOL            shift and go to state 11
+    TIMES           reduce using rule 19 (factor -> BOOL .)
+    DIVIDE          reduce using rule 19 (factor -> BOOL .)
+    SEMICOLON       reduce using rule 19 (factor -> BOOL .)
+    PLUS            reduce using rule 19 (factor -> BOOL .)
+    MINUS           reduce using rule 19 (factor -> BOOL .)
+    RPAREN          reduce using rule 19 (factor -> BOOL .)
 
-    expression                     shift and go to state 35
 
 state 21
 
-    (12) expression -> expression GE . expression
-    (5) expression -> . expression PLUS expression
-    (6) expression -> . expression MINUS expression
-    (7) expression -> . expression TIMES expression
-    (8) expression -> . expression DIVIDE expression
-    (9) expression -> . expression EQ expression
-    (10) expression -> . expression NEQ expression
-    (11) expression -> . expression LE expression
-    (12) expression -> . expression GE expression
-    (13) expression -> . expression LT expression
-    (14) expression -> . expression GT expression
-    (15) expression -> . expression AND expression
-    (16) expression -> . expression OR expression
-    (17) expression -> . MINUS expression
-    (18) expression -> . LPAREN expression RPAREN
-    (19) expression -> . ID
-    (20) expression -> . INT
-    (21) expression -> . BOOL
+    (21) factor -> LPAREN . expression RPAREN
+    (12) expression -> . expression PLUS term
+    (13) expression -> . expression MINUS term
+    (14) expression -> . term
+    (15) term -> . term TIMES factor
+    (16) term -> . term DIVIDE factor
+    (17) term -> . factor
+    (18) factor -> . INT
+    (19) factor -> . BOOL
+    (20) factor -> . ID
+    (21) factor -> . LPAREN expression RPAREN
 
-    MINUS           shift and go to state 8
-    LPAREN          shift and go to state 9
-    ID              shift and go to state 6
-    INT             shift and go to state 10
-    BOOL            shift and go to state 11
+    INT             shift and go to state 19
+    BOOL            shift and go to state 20
+    ID              shift and go to state 15
+    LPAREN          shift and go to state 21
 
-    expression                     shift and go to state 36
+    expression                     shift and go to state 29
+    term                           shift and go to state 17
+    factor                         shift and go to state 18
 
 state 22
 
-    (13) expression -> expression LT . expression
-    (5) expression -> . expression PLUS expression
-    (6) expression -> . expression MINUS expression
-    (7) expression -> . expression TIMES expression
-    (8) expression -> . expression DIVIDE expression
-    (9) expression -> . expression EQ expression
-    (10) expression -> . expression NEQ expression
-    (11) expression -> . expression LE expression
-    (12) expression -> . expression GE expression
-    (13) expression -> . expression LT expression
-    (14) expression -> . expression GT expression
-    (15) expression -> . expression AND expression
-    (16) expression -> . expression OR expression
-    (17) expression -> . MINUS expression
-    (18) expression -> . LPAREN expression RPAREN
-    (19) expression -> . ID
-    (20) expression -> . INT
-    (21) expression -> . BOOL
+    (8) if_statement -> IF LPAREN expression . RPAREN SCOPE statements SCOPE else_block
+    (12) expression -> expression . PLUS term
+    (13) expression -> expression . MINUS term
 
-    MINUS           shift and go to state 8
-    LPAREN          shift and go to state 9
-    ID              shift and go to state 6
-    INT             shift and go to state 10
-    BOOL            shift and go to state 11
+    RPAREN          shift and go to state 30
+    PLUS            shift and go to state 25
+    MINUS           shift and go to state 26
 
-    expression                     shift and go to state 37
 
 state 23
 
-    (14) expression -> expression GT . expression
-    (5) expression -> . expression PLUS expression
-    (6) expression -> . expression MINUS expression
-    (7) expression -> . expression TIMES expression
-    (8) expression -> . expression DIVIDE expression
-    (9) expression -> . expression EQ expression
-    (10) expression -> . expression NEQ expression
-    (11) expression -> . expression LE expression
-    (12) expression -> . expression GE expression
-    (13) expression -> . expression LT expression
-    (14) expression -> . expression GT expression
-    (15) expression -> . expression AND expression
-    (16) expression -> . expression OR expression
-    (17) expression -> . MINUS expression
-    (18) expression -> . LPAREN expression RPAREN
-    (19) expression -> . ID
-    (20) expression -> . INT
-    (21) expression -> . BOOL
+    (11) while_statement -> WHILE LPAREN expression . RPAREN SCOPE statements SCOPE
+    (12) expression -> expression . PLUS term
+    (13) expression -> expression . MINUS term
 
-    MINUS           shift and go to state 8
-    LPAREN          shift and go to state 9
-    ID              shift and go to state 6
-    INT             shift and go to state 10
-    BOOL            shift and go to state 11
+    RPAREN          shift and go to state 31
+    PLUS            shift and go to state 25
+    MINUS           shift and go to state 26
 
-    expression                     shift and go to state 38
 
 state 24
 
-    (15) expression -> expression AND . expression
-    (5) expression -> . expression PLUS expression
-    (6) expression -> . expression MINUS expression
-    (7) expression -> . expression TIMES expression
-    (8) expression -> . expression DIVIDE expression
-    (9) expression -> . expression EQ expression
-    (10) expression -> . expression NEQ expression
-    (11) expression -> . expression LE expression
-    (12) expression -> . expression GE expression
-    (13) expression -> . expression LT expression
-    (14) expression -> . expression GT expression
-    (15) expression -> . expression AND expression
-    (16) expression -> . expression OR expression
-    (17) expression -> . MINUS expression
-    (18) expression -> . LPAREN expression RPAREN
-    (19) expression -> . ID
-    (20) expression -> . INT
-    (21) expression -> . BOOL
+    (7) assignment -> ID ASSIGN expression SEMICOLON .
 
-    MINUS           shift and go to state 8
-    LPAREN          shift and go to state 9
-    ID              shift and go to state 6
-    INT             shift and go to state 10
-    BOOL            shift and go to state 11
+    ID              reduce using rule 7 (assignment -> ID ASSIGN expression SEMICOLON .)
+    IF              reduce using rule 7 (assignment -> ID ASSIGN expression SEMICOLON .)
+    WHILE           reduce using rule 7 (assignment -> ID ASSIGN expression SEMICOLON .)
+    $end            reduce using rule 7 (assignment -> ID ASSIGN expression SEMICOLON .)
+    SCOPE           reduce using rule 7 (assignment -> ID ASSIGN expression SEMICOLON .)
 
-    expression                     shift and go to state 39
 
 state 25
 
-    (16) expression -> expression OR . expression
-    (5) expression -> . expression PLUS expression
-    (6) expression -> . expression MINUS expression
-    (7) expression -> . expression TIMES expression
-    (8) expression -> . expression DIVIDE expression
-    (9) expression -> . expression EQ expression
-    (10) expression -> . expression NEQ expression
-    (11) expression -> . expression LE expression
-    (12) expression -> . expression GE expression
-    (13) expression -> . expression LT expression
-    (14) expression -> . expression GT expression
-    (15) expression -> . expression AND expression
-    (16) expression -> . expression OR expression
-    (17) expression -> . MINUS expression
-    (18) expression -> . LPAREN expression RPAREN
-    (19) expression -> . ID
-    (20) expression -> . INT
-    (21) expression -> . BOOL
+    (12) expression -> expression PLUS . term
+    (15) term -> . term TIMES factor
+    (16) term -> . term DIVIDE factor
+    (17) term -> . factor
+    (18) factor -> . INT
+    (19) factor -> . BOOL
+    (20) factor -> . ID
+    (21) factor -> . LPAREN expression RPAREN
 
-    MINUS           shift and go to state 8
-    LPAREN          shift and go to state 9
-    ID              shift and go to state 6
-    INT             shift and go to state 10
-    BOOL            shift and go to state 11
+    INT             shift and go to state 19
+    BOOL            shift and go to state 20
+    ID              shift and go to state 15
+    LPAREN          shift and go to state 21
 
-    expression                     shift and go to state 40
+    term                           shift and go to state 32
+    factor                         shift and go to state 18
 
 state 26
 
-    (17) expression -> MINUS expression .
-    (5) expression -> expression . PLUS expression
-    (6) expression -> expression . MINUS expression
-    (7) expression -> expression . TIMES expression
-    (8) expression -> expression . DIVIDE expression
-    (9) expression -> expression . EQ expression
-    (10) expression -> expression . NEQ expression
-    (11) expression -> expression . LE expression
-    (12) expression -> expression . GE expression
-    (13) expression -> expression . LT expression
-    (14) expression -> expression . GT expression
-    (15) expression -> expression . AND expression
-    (16) expression -> expression . OR expression
+    (13) expression -> expression MINUS . term
+    (15) term -> . term TIMES factor
+    (16) term -> . term DIVIDE factor
+    (17) term -> . factor
+    (18) factor -> . INT
+    (19) factor -> . BOOL
+    (20) factor -> . ID
+    (21) factor -> . LPAREN expression RPAREN
 
-    SEMICOLON       reduce using rule 17 (expression -> MINUS expression .)
-    PLUS            reduce using rule 17 (expression -> MINUS expression .)
-    MINUS           reduce using rule 17 (expression -> MINUS expression .)
-    EQ              reduce using rule 17 (expression -> MINUS expression .)
-    NEQ             reduce using rule 17 (expression -> MINUS expression .)
-    LE              reduce using rule 17 (expression -> MINUS expression .)
-    GE              reduce using rule 17 (expression -> MINUS expression .)
-    LT              reduce using rule 17 (expression -> MINUS expression .)
-    GT              reduce using rule 17 (expression -> MINUS expression .)
-    AND             reduce using rule 17 (expression -> MINUS expression .)
-    OR              reduce using rule 17 (expression -> MINUS expression .)
-    RPAREN          reduce using rule 17 (expression -> MINUS expression .)
-    TIMES           shift and go to state 16
-    DIVIDE          shift and go to state 17
+    INT             shift and go to state 19
+    BOOL            shift and go to state 20
+    ID              shift and go to state 15
+    LPAREN          shift and go to state 21
 
-  ! TIMES           [ reduce using rule 17 (expression -> MINUS expression .) ]
-  ! DIVIDE          [ reduce using rule 17 (expression -> MINUS expression .) ]
-  ! PLUS            [ shift and go to state 14 ]
-  ! MINUS           [ shift and go to state 15 ]
-  ! EQ              [ shift and go to state 18 ]
-  ! NEQ             [ shift and go to state 19 ]
-  ! LE              [ shift and go to state 20 ]
-  ! GE              [ shift and go to state 21 ]
-  ! LT              [ shift and go to state 22 ]
-  ! GT              [ shift and go to state 23 ]
-  ! AND             [ shift and go to state 24 ]
-  ! OR              [ shift and go to state 25 ]
-
+    term                           shift and go to state 33
+    factor                         shift and go to state 18
 
 state 27
 
-    (18) expression -> LPAREN expression . RPAREN
-    (5) expression -> expression . PLUS expression
-    (6) expression -> expression . MINUS expression
-    (7) expression -> expression . TIMES expression
-    (8) expression -> expression . DIVIDE expression
-    (9) expression -> expression . EQ expression
-    (10) expression -> expression . NEQ expression
-    (11) expression -> expression . LE expression
-    (12) expression -> expression . GE expression
-    (13) expression -> expression . LT expression
-    (14) expression -> expression . GT expression
-    (15) expression -> expression . AND expression
-    (16) expression -> expression . OR expression
+    (15) term -> term TIMES . factor
+    (18) factor -> . INT
+    (19) factor -> . BOOL
+    (20) factor -> . ID
+    (21) factor -> . LPAREN expression RPAREN
 
-    RPAREN          shift and go to state 41
-    PLUS            shift and go to state 14
-    MINUS           shift and go to state 15
-    TIMES           shift and go to state 16
-    DIVIDE          shift and go to state 17
-    EQ              shift and go to state 18
-    NEQ             shift and go to state 19
-    LE              shift and go to state 20
-    GE              shift and go to state 21
-    LT              shift and go to state 22
-    GT              shift and go to state 23
-    AND             shift and go to state 24
-    OR              shift and go to state 25
+    INT             shift and go to state 19
+    BOOL            shift and go to state 20
+    ID              shift and go to state 15
+    LPAREN          shift and go to state 21
 
+    factor                         shift and go to state 34
 
 state 28
 
-    (2) statement -> IF LPAREN expression RPAREN . SCOPE statements SCOPE
+    (16) term -> term DIVIDE . factor
+    (18) factor -> . INT
+    (19) factor -> . BOOL
+    (20) factor -> . ID
+    (21) factor -> . LPAREN expression RPAREN
 
-    SCOPE           shift and go to state 42
+    INT             shift and go to state 19
+    BOOL            shift and go to state 20
+    ID              shift and go to state 15
+    LPAREN          shift and go to state 21
 
+    factor                         shift and go to state 35
 
 state 29
 
-    (5) expression -> expression PLUS expression .
-    (5) expression -> expression . PLUS expression
-    (6) expression -> expression . MINUS expression
-    (7) expression -> expression . TIMES expression
-    (8) expression -> expression . DIVIDE expression
-    (9) expression -> expression . EQ expression
-    (10) expression -> expression . NEQ expression
-    (11) expression -> expression . LE expression
-    (12) expression -> expression . GE expression
-    (13) expression -> expression . LT expression
-    (14) expression -> expression . GT expression
-    (15) expression -> expression . AND expression
-    (16) expression -> expression . OR expression
+    (21) factor -> LPAREN expression . RPAREN
+    (12) expression -> expression . PLUS term
+    (13) expression -> expression . MINUS term
 
-    SEMICOLON       reduce using rule 5 (expression -> expression PLUS expression .)
-    PLUS            reduce using rule 5 (expression -> expression PLUS expression .)
-    MINUS           reduce using rule 5 (expression -> expression PLUS expression .)
-    EQ              reduce using rule 5 (expression -> expression PLUS expression .)
-    NEQ             reduce using rule 5 (expression -> expression PLUS expression .)
-    LE              reduce using rule 5 (expression -> expression PLUS expression .)
-    GE              reduce using rule 5 (expression -> expression PLUS expression .)
-    LT              reduce using rule 5 (expression -> expression PLUS expression .)
-    GT              reduce using rule 5 (expression -> expression PLUS expression .)
-    AND             reduce using rule 5 (expression -> expression PLUS expression .)
-    OR              reduce using rule 5 (expression -> expression PLUS expression .)
-    RPAREN          reduce using rule 5 (expression -> expression PLUS expression .)
-    TIMES           shift and go to state 16
-    DIVIDE          shift and go to state 17
-
-  ! TIMES           [ reduce using rule 5 (expression -> expression PLUS expression .) ]
-  ! DIVIDE          [ reduce using rule 5 (expression -> expression PLUS expression .) ]
-  ! PLUS            [ shift and go to state 14 ]
-  ! MINUS           [ shift and go to state 15 ]
-  ! EQ              [ shift and go to state 18 ]
-  ! NEQ             [ shift and go to state 19 ]
-  ! LE              [ shift and go to state 20 ]
-  ! GE              [ shift and go to state 21 ]
-  ! LT              [ shift and go to state 22 ]
-  ! GT              [ shift and go to state 23 ]
-  ! AND             [ shift and go to state 24 ]
-  ! OR              [ shift and go to state 25 ]
+    RPAREN          shift and go to state 36
+    PLUS            shift and go to state 25
+    MINUS           shift and go to state 26
 
 
 state 30
 
-    (6) expression -> expression MINUS expression .
-    (5) expression -> expression . PLUS expression
-    (6) expression -> expression . MINUS expression
-    (7) expression -> expression . TIMES expression
-    (8) expression -> expression . DIVIDE expression
-    (9) expression -> expression . EQ expression
-    (10) expression -> expression . NEQ expression
-    (11) expression -> expression . LE expression
-    (12) expression -> expression . GE expression
-    (13) expression -> expression . LT expression
-    (14) expression -> expression . GT expression
-    (15) expression -> expression . AND expression
-    (16) expression -> expression . OR expression
+    (8) if_statement -> IF LPAREN expression RPAREN . SCOPE statements SCOPE else_block
 
-    SEMICOLON       reduce using rule 6 (expression -> expression MINUS expression .)
-    PLUS            reduce using rule 6 (expression -> expression MINUS expression .)
-    MINUS           reduce using rule 6 (expression -> expression MINUS expression .)
-    EQ              reduce using rule 6 (expression -> expression MINUS expression .)
-    NEQ             reduce using rule 6 (expression -> expression MINUS expression .)
-    LE              reduce using rule 6 (expression -> expression MINUS expression .)
-    GE              reduce using rule 6 (expression -> expression MINUS expression .)
-    LT              reduce using rule 6 (expression -> expression MINUS expression .)
-    GT              reduce using rule 6 (expression -> expression MINUS expression .)
-    AND             reduce using rule 6 (expression -> expression MINUS expression .)
-    OR              reduce using rule 6 (expression -> expression MINUS expression .)
-    RPAREN          reduce using rule 6 (expression -> expression MINUS expression .)
-    TIMES           shift and go to state 16
-    DIVIDE          shift and go to state 17
-
-  ! TIMES           [ reduce using rule 6 (expression -> expression MINUS expression .) ]
-  ! DIVIDE          [ reduce using rule 6 (expression -> expression MINUS expression .) ]
-  ! PLUS            [ shift and go to state 14 ]
-  ! MINUS           [ shift and go to state 15 ]
-  ! EQ              [ shift and go to state 18 ]
-  ! NEQ             [ shift and go to state 19 ]
-  ! LE              [ shift and go to state 20 ]
-  ! GE              [ shift and go to state 21 ]
-  ! LT              [ shift and go to state 22 ]
-  ! GT              [ shift and go to state 23 ]
-  ! AND             [ shift and go to state 24 ]
-  ! OR              [ shift and go to state 25 ]
+    SCOPE           shift and go to state 37
 
 
 state 31
 
-    (7) expression -> expression TIMES expression .
-    (5) expression -> expression . PLUS expression
-    (6) expression -> expression . MINUS expression
-    (7) expression -> expression . TIMES expression
-    (8) expression -> expression . DIVIDE expression
-    (9) expression -> expression . EQ expression
-    (10) expression -> expression . NEQ expression
-    (11) expression -> expression . LE expression
-    (12) expression -> expression . GE expression
-    (13) expression -> expression . LT expression
-    (14) expression -> expression . GT expression
-    (15) expression -> expression . AND expression
-    (16) expression -> expression . OR expression
+    (11) while_statement -> WHILE LPAREN expression RPAREN . SCOPE statements SCOPE
 
-    SEMICOLON       reduce using rule 7 (expression -> expression TIMES expression .)
-    PLUS            reduce using rule 7 (expression -> expression TIMES expression .)
-    MINUS           reduce using rule 7 (expression -> expression TIMES expression .)
-    TIMES           reduce using rule 7 (expression -> expression TIMES expression .)
-    DIVIDE          reduce using rule 7 (expression -> expression TIMES expression .)
-    EQ              reduce using rule 7 (expression -> expression TIMES expression .)
-    NEQ             reduce using rule 7 (expression -> expression TIMES expression .)
-    LE              reduce using rule 7 (expression -> expression TIMES expression .)
-    GE              reduce using rule 7 (expression -> expression TIMES expression .)
-    LT              reduce using rule 7 (expression -> expression TIMES expression .)
-    GT              reduce using rule 7 (expression -> expression TIMES expression .)
-    AND             reduce using rule 7 (expression -> expression TIMES expression .)
-    OR              reduce using rule 7 (expression -> expression TIMES expression .)
-    RPAREN          reduce using rule 7 (expression -> expression TIMES expression .)
-
-  ! PLUS            [ shift and go to state 14 ]
-  ! MINUS           [ shift and go to state 15 ]
-  ! TIMES           [ shift and go to state 16 ]
-  ! DIVIDE          [ shift and go to state 17 ]
-  ! EQ              [ shift and go to state 18 ]
-  ! NEQ             [ shift and go to state 19 ]
-  ! LE              [ shift and go to state 20 ]
-  ! GE              [ shift and go to state 21 ]
-  ! LT              [ shift and go to state 22 ]
-  ! GT              [ shift and go to state 23 ]
-  ! AND             [ shift and go to state 24 ]
-  ! OR              [ shift and go to state 25 ]
+    SCOPE           shift and go to state 38
 
 
 state 32
 
-    (8) expression -> expression DIVIDE expression .
-    (5) expression -> expression . PLUS expression
-    (6) expression -> expression . MINUS expression
-    (7) expression -> expression . TIMES expression
-    (8) expression -> expression . DIVIDE expression
-    (9) expression -> expression . EQ expression
-    (10) expression -> expression . NEQ expression
-    (11) expression -> expression . LE expression
-    (12) expression -> expression . GE expression
-    (13) expression -> expression . LT expression
-    (14) expression -> expression . GT expression
-    (15) expression -> expression . AND expression
-    (16) expression -> expression . OR expression
+    (12) expression -> expression PLUS term .
+    (15) term -> term . TIMES factor
+    (16) term -> term . DIVIDE factor
 
-    SEMICOLON       reduce using rule 8 (expression -> expression DIVIDE expression .)
-    PLUS            reduce using rule 8 (expression -> expression DIVIDE expression .)
-    MINUS           reduce using rule 8 (expression -> expression DIVIDE expression .)
-    TIMES           reduce using rule 8 (expression -> expression DIVIDE expression .)
-    DIVIDE          reduce using rule 8 (expression -> expression DIVIDE expression .)
-    EQ              reduce using rule 8 (expression -> expression DIVIDE expression .)
-    NEQ             reduce using rule 8 (expression -> expression DIVIDE expression .)
-    LE              reduce using rule 8 (expression -> expression DIVIDE expression .)
-    GE              reduce using rule 8 (expression -> expression DIVIDE expression .)
-    LT              reduce using rule 8 (expression -> expression DIVIDE expression .)
-    GT              reduce using rule 8 (expression -> expression DIVIDE expression .)
-    AND             reduce using rule 8 (expression -> expression DIVIDE expression .)
-    OR              reduce using rule 8 (expression -> expression DIVIDE expression .)
-    RPAREN          reduce using rule 8 (expression -> expression DIVIDE expression .)
-
-  ! PLUS            [ shift and go to state 14 ]
-  ! MINUS           [ shift and go to state 15 ]
-  ! TIMES           [ shift and go to state 16 ]
-  ! DIVIDE          [ shift and go to state 17 ]
-  ! EQ              [ shift and go to state 18 ]
-  ! NEQ             [ shift and go to state 19 ]
-  ! LE              [ shift and go to state 20 ]
-  ! GE              [ shift and go to state 21 ]
-  ! LT              [ shift and go to state 22 ]
-  ! GT              [ shift and go to state 23 ]
-  ! AND             [ shift and go to state 24 ]
-  ! OR              [ shift and go to state 25 ]
+    SEMICOLON       reduce using rule 12 (expression -> expression PLUS term .)
+    PLUS            reduce using rule 12 (expression -> expression PLUS term .)
+    MINUS           reduce using rule 12 (expression -> expression PLUS term .)
+    RPAREN          reduce using rule 12 (expression -> expression PLUS term .)
+    TIMES           shift and go to state 27
+    DIVIDE          shift and go to state 28
 
 
 state 33
 
-    (9) expression -> expression EQ expression .
-    (5) expression -> expression . PLUS expression
-    (6) expression -> expression . MINUS expression
-    (7) expression -> expression . TIMES expression
-    (8) expression -> expression . DIVIDE expression
-    (9) expression -> expression . EQ expression
-    (10) expression -> expression . NEQ expression
-    (11) expression -> expression . LE expression
-    (12) expression -> expression . GE expression
-    (13) expression -> expression . LT expression
-    (14) expression -> expression . GT expression
-    (15) expression -> expression . AND expression
-    (16) expression -> expression . OR expression
+    (13) expression -> expression MINUS term .
+    (15) term -> term . TIMES factor
+    (16) term -> term . DIVIDE factor
 
-    SEMICOLON       reduce using rule 9 (expression -> expression EQ expression .)
-    EQ              reduce using rule 9 (expression -> expression EQ expression .)
-    NEQ             reduce using rule 9 (expression -> expression EQ expression .)
-    LE              reduce using rule 9 (expression -> expression EQ expression .)
-    GE              reduce using rule 9 (expression -> expression EQ expression .)
-    LT              reduce using rule 9 (expression -> expression EQ expression .)
-    GT              reduce using rule 9 (expression -> expression EQ expression .)
-    AND             reduce using rule 9 (expression -> expression EQ expression .)
-    OR              reduce using rule 9 (expression -> expression EQ expression .)
-    RPAREN          reduce using rule 9 (expression -> expression EQ expression .)
-    PLUS            shift and go to state 14
-    MINUS           shift and go to state 15
-    TIMES           shift and go to state 16
-    DIVIDE          shift and go to state 17
-
-  ! PLUS            [ reduce using rule 9 (expression -> expression EQ expression .) ]
-  ! MINUS           [ reduce using rule 9 (expression -> expression EQ expression .) ]
-  ! TIMES           [ reduce using rule 9 (expression -> expression EQ expression .) ]
-  ! DIVIDE          [ reduce using rule 9 (expression -> expression EQ expression .) ]
-  ! EQ              [ shift and go to state 18 ]
-  ! NEQ             [ shift and go to state 19 ]
-  ! LE              [ shift and go to state 20 ]
-  ! GE              [ shift and go to state 21 ]
-  ! LT              [ shift and go to state 22 ]
-  ! GT              [ shift and go to state 23 ]
-  ! AND             [ shift and go to state 24 ]
-  ! OR              [ shift and go to state 25 ]
+    SEMICOLON       reduce using rule 13 (expression -> expression MINUS term .)
+    PLUS            reduce using rule 13 (expression -> expression MINUS term .)
+    MINUS           reduce using rule 13 (expression -> expression MINUS term .)
+    RPAREN          reduce using rule 13 (expression -> expression MINUS term .)
+    TIMES           shift and go to state 27
+    DIVIDE          shift and go to state 28
 
 
 state 34
 
-    (10) expression -> expression NEQ expression .
-    (5) expression -> expression . PLUS expression
-    (6) expression -> expression . MINUS expression
-    (7) expression -> expression . TIMES expression
-    (8) expression -> expression . DIVIDE expression
-    (9) expression -> expression . EQ expression
-    (10) expression -> expression . NEQ expression
-    (11) expression -> expression . LE expression
-    (12) expression -> expression . GE expression
-    (13) expression -> expression . LT expression
-    (14) expression -> expression . GT expression
-    (15) expression -> expression . AND expression
-    (16) expression -> expression . OR expression
+    (15) term -> term TIMES factor .
 
-    SEMICOLON       reduce using rule 10 (expression -> expression NEQ expression .)
-    EQ              reduce using rule 10 (expression -> expression NEQ expression .)
-    NEQ             reduce using rule 10 (expression -> expression NEQ expression .)
-    LE              reduce using rule 10 (expression -> expression NEQ expression .)
-    GE              reduce using rule 10 (expression -> expression NEQ expression .)
-    LT              reduce using rule 10 (expression -> expression NEQ expression .)
-    GT              reduce using rule 10 (expression -> expression NEQ expression .)
-    AND             reduce using rule 10 (expression -> expression NEQ expression .)
-    OR              reduce using rule 10 (expression -> expression NEQ expression .)
-    RPAREN          reduce using rule 10 (expression -> expression NEQ expression .)
-    PLUS            shift and go to state 14
-    MINUS           shift and go to state 15
-    TIMES           shift and go to state 16
-    DIVIDE          shift and go to state 17
-
-  ! PLUS            [ reduce using rule 10 (expression -> expression NEQ expression .) ]
-  ! MINUS           [ reduce using rule 10 (expression -> expression NEQ expression .) ]
-  ! TIMES           [ reduce using rule 10 (expression -> expression NEQ expression .) ]
-  ! DIVIDE          [ reduce using rule 10 (expression -> expression NEQ expression .) ]
-  ! EQ              [ shift and go to state 18 ]
-  ! NEQ             [ shift and go to state 19 ]
-  ! LE              [ shift and go to state 20 ]
-  ! GE              [ shift and go to state 21 ]
-  ! LT              [ shift and go to state 22 ]
-  ! GT              [ shift and go to state 23 ]
-  ! AND             [ shift and go to state 24 ]
-  ! OR              [ shift and go to state 25 ]
+    TIMES           reduce using rule 15 (term -> term TIMES factor .)
+    DIVIDE          reduce using rule 15 (term -> term TIMES factor .)
+    SEMICOLON       reduce using rule 15 (term -> term TIMES factor .)
+    PLUS            reduce using rule 15 (term -> term TIMES factor .)
+    MINUS           reduce using rule 15 (term -> term TIMES factor .)
+    RPAREN          reduce using rule 15 (term -> term TIMES factor .)
 
 
 state 35
 
-    (11) expression -> expression LE expression .
-    (5) expression -> expression . PLUS expression
-    (6) expression -> expression . MINUS expression
-    (7) expression -> expression . TIMES expression
-    (8) expression -> expression . DIVIDE expression
-    (9) expression -> expression . EQ expression
-    (10) expression -> expression . NEQ expression
-    (11) expression -> expression . LE expression
-    (12) expression -> expression . GE expression
-    (13) expression -> expression . LT expression
-    (14) expression -> expression . GT expression
-    (15) expression -> expression . AND expression
-    (16) expression -> expression . OR expression
+    (16) term -> term DIVIDE factor .
 
-    SEMICOLON       reduce using rule 11 (expression -> expression LE expression .)
-    EQ              reduce using rule 11 (expression -> expression LE expression .)
-    NEQ             reduce using rule 11 (expression -> expression LE expression .)
-    LE              reduce using rule 11 (expression -> expression LE expression .)
-    GE              reduce using rule 11 (expression -> expression LE expression .)
-    LT              reduce using rule 11 (expression -> expression LE expression .)
-    GT              reduce using rule 11 (expression -> expression LE expression .)
-    AND             reduce using rule 11 (expression -> expression LE expression .)
-    OR              reduce using rule 11 (expression -> expression LE expression .)
-    RPAREN          reduce using rule 11 (expression -> expression LE expression .)
-    PLUS            shift and go to state 14
-    MINUS           shift and go to state 15
-    TIMES           shift and go to state 16
-    DIVIDE          shift and go to state 17
-
-  ! PLUS            [ reduce using rule 11 (expression -> expression LE expression .) ]
-  ! MINUS           [ reduce using rule 11 (expression -> expression LE expression .) ]
-  ! TIMES           [ reduce using rule 11 (expression -> expression LE expression .) ]
-  ! DIVIDE          [ reduce using rule 11 (expression -> expression LE expression .) ]
-  ! EQ              [ shift and go to state 18 ]
-  ! NEQ             [ shift and go to state 19 ]
-  ! LE              [ shift and go to state 20 ]
-  ! GE              [ shift and go to state 21 ]
-  ! LT              [ shift and go to state 22 ]
-  ! GT              [ shift and go to state 23 ]
-  ! AND             [ shift and go to state 24 ]
-  ! OR              [ shift and go to state 25 ]
+    TIMES           reduce using rule 16 (term -> term DIVIDE factor .)
+    DIVIDE          reduce using rule 16 (term -> term DIVIDE factor .)
+    SEMICOLON       reduce using rule 16 (term -> term DIVIDE factor .)
+    PLUS            reduce using rule 16 (term -> term DIVIDE factor .)
+    MINUS           reduce using rule 16 (term -> term DIVIDE factor .)
+    RPAREN          reduce using rule 16 (term -> term DIVIDE factor .)
 
 
 state 36
 
-    (12) expression -> expression GE expression .
-    (5) expression -> expression . PLUS expression
-    (6) expression -> expression . MINUS expression
-    (7) expression -> expression . TIMES expression
-    (8) expression -> expression . DIVIDE expression
-    (9) expression -> expression . EQ expression
-    (10) expression -> expression . NEQ expression
-    (11) expression -> expression . LE expression
-    (12) expression -> expression . GE expression
-    (13) expression -> expression . LT expression
-    (14) expression -> expression . GT expression
-    (15) expression -> expression . AND expression
-    (16) expression -> expression . OR expression
+    (21) factor -> LPAREN expression RPAREN .
 
-    SEMICOLON       reduce using rule 12 (expression -> expression GE expression .)
-    EQ              reduce using rule 12 (expression -> expression GE expression .)
-    NEQ             reduce using rule 12 (expression -> expression GE expression .)
-    LE              reduce using rule 12 (expression -> expression GE expression .)
-    GE              reduce using rule 12 (expression -> expression GE expression .)
-    LT              reduce using rule 12 (expression -> expression GE expression .)
-    GT              reduce using rule 12 (expression -> expression GE expression .)
-    AND             reduce using rule 12 (expression -> expression GE expression .)
-    OR              reduce using rule 12 (expression -> expression GE expression .)
-    RPAREN          reduce using rule 12 (expression -> expression GE expression .)
-    PLUS            shift and go to state 14
-    MINUS           shift and go to state 15
-    TIMES           shift and go to state 16
-    DIVIDE          shift and go to state 17
-
-  ! PLUS            [ reduce using rule 12 (expression -> expression GE expression .) ]
-  ! MINUS           [ reduce using rule 12 (expression -> expression GE expression .) ]
-  ! TIMES           [ reduce using rule 12 (expression -> expression GE expression .) ]
-  ! DIVIDE          [ reduce using rule 12 (expression -> expression GE expression .) ]
-  ! EQ              [ shift and go to state 18 ]
-  ! NEQ             [ shift and go to state 19 ]
-  ! LE              [ shift and go to state 20 ]
-  ! GE              [ shift and go to state 21 ]
-  ! LT              [ shift and go to state 22 ]
-  ! GT              [ shift and go to state 23 ]
-  ! AND             [ shift and go to state 24 ]
-  ! OR              [ shift and go to state 25 ]
+    TIMES           reduce using rule 21 (factor -> LPAREN expression RPAREN .)
+    DIVIDE          reduce using rule 21 (factor -> LPAREN expression RPAREN .)
+    SEMICOLON       reduce using rule 21 (factor -> LPAREN expression RPAREN .)
+    PLUS            reduce using rule 21 (factor -> LPAREN expression RPAREN .)
+    MINUS           reduce using rule 21 (factor -> LPAREN expression RPAREN .)
+    RPAREN          reduce using rule 21 (factor -> LPAREN expression RPAREN .)
 
 
 state 37
 
-    (13) expression -> expression LT expression .
-    (5) expression -> expression . PLUS expression
-    (6) expression -> expression . MINUS expression
-    (7) expression -> expression . TIMES expression
-    (8) expression -> expression . DIVIDE expression
-    (9) expression -> expression . EQ expression
-    (10) expression -> expression . NEQ expression
-    (11) expression -> expression . LE expression
-    (12) expression -> expression . GE expression
-    (13) expression -> expression . LT expression
-    (14) expression -> expression . GT expression
-    (15) expression -> expression . AND expression
-    (16) expression -> expression . OR expression
+    (8) if_statement -> IF LPAREN expression RPAREN SCOPE . statements SCOPE else_block
+    (2) statements -> . statement statements
+    (3) statements -> . empty
+    (4) statement -> . assignment
+    (5) statement -> . if_statement
+    (6) statement -> . while_statement
+    (22) empty -> .
+    (7) assignment -> . ID ASSIGN expression SEMICOLON
+    (8) if_statement -> . IF LPAREN expression RPAREN SCOPE statements SCOPE else_block
+    (11) while_statement -> . WHILE LPAREN expression RPAREN SCOPE statements SCOPE
 
-    SEMICOLON       reduce using rule 13 (expression -> expression LT expression .)
-    EQ              reduce using rule 13 (expression -> expression LT expression .)
-    NEQ             reduce using rule 13 (expression -> expression LT expression .)
-    LE              reduce using rule 13 (expression -> expression LT expression .)
-    GE              reduce using rule 13 (expression -> expression LT expression .)
-    LT              reduce using rule 13 (expression -> expression LT expression .)
-    GT              reduce using rule 13 (expression -> expression LT expression .)
-    AND             reduce using rule 13 (expression -> expression LT expression .)
-    OR              reduce using rule 13 (expression -> expression LT expression .)
-    RPAREN          reduce using rule 13 (expression -> expression LT expression .)
-    PLUS            shift and go to state 14
-    MINUS           shift and go to state 15
-    TIMES           shift and go to state 16
-    DIVIDE          shift and go to state 17
+    SCOPE           reduce using rule 22 (empty -> .)
+    ID              shift and go to state 8
+    IF              shift and go to state 9
+    WHILE           shift and go to state 10
 
-  ! PLUS            [ reduce using rule 13 (expression -> expression LT expression .) ]
-  ! MINUS           [ reduce using rule 13 (expression -> expression LT expression .) ]
-  ! TIMES           [ reduce using rule 13 (expression -> expression LT expression .) ]
-  ! DIVIDE          [ reduce using rule 13 (expression -> expression LT expression .) ]
-  ! EQ              [ shift and go to state 18 ]
-  ! NEQ             [ shift and go to state 19 ]
-  ! LE              [ shift and go to state 20 ]
-  ! GE              [ shift and go to state 21 ]
-  ! LT              [ shift and go to state 22 ]
-  ! GT              [ shift and go to state 23 ]
-  ! AND             [ shift and go to state 24 ]
-  ! OR              [ shift and go to state 25 ]
-
+    statements                     shift and go to state 39
+    statement                      shift and go to state 3
+    empty                          shift and go to state 4
+    assignment                     shift and go to state 5
+    if_statement                   shift and go to state 6
+    while_statement                shift and go to state 7
 
 state 38
 
-    (14) expression -> expression GT expression .
-    (5) expression -> expression . PLUS expression
-    (6) expression -> expression . MINUS expression
-    (7) expression -> expression . TIMES expression
-    (8) expression -> expression . DIVIDE expression
-    (9) expression -> expression . EQ expression
-    (10) expression -> expression . NEQ expression
-    (11) expression -> expression . LE expression
-    (12) expression -> expression . GE expression
-    (13) expression -> expression . LT expression
-    (14) expression -> expression . GT expression
-    (15) expression -> expression . AND expression
-    (16) expression -> expression . OR expression
+    (11) while_statement -> WHILE LPAREN expression RPAREN SCOPE . statements SCOPE
+    (2) statements -> . statement statements
+    (3) statements -> . empty
+    (4) statement -> . assignment
+    (5) statement -> . if_statement
+    (6) statement -> . while_statement
+    (22) empty -> .
+    (7) assignment -> . ID ASSIGN expression SEMICOLON
+    (8) if_statement -> . IF LPAREN expression RPAREN SCOPE statements SCOPE else_block
+    (11) while_statement -> . WHILE LPAREN expression RPAREN SCOPE statements SCOPE
 
-    SEMICOLON       reduce using rule 14 (expression -> expression GT expression .)
-    EQ              reduce using rule 14 (expression -> expression GT expression .)
-    NEQ             reduce using rule 14 (expression -> expression GT expression .)
-    LE              reduce using rule 14 (expression -> expression GT expression .)
-    GE              reduce using rule 14 (expression -> expression GT expression .)
-    LT              reduce using rule 14 (expression -> expression GT expression .)
-    GT              reduce using rule 14 (expression -> expression GT expression .)
-    AND             reduce using rule 14 (expression -> expression GT expression .)
-    OR              reduce using rule 14 (expression -> expression GT expression .)
-    RPAREN          reduce using rule 14 (expression -> expression GT expression .)
-    PLUS            shift and go to state 14
-    MINUS           shift and go to state 15
-    TIMES           shift and go to state 16
-    DIVIDE          shift and go to state 17
+    SCOPE           reduce using rule 22 (empty -> .)
+    ID              shift and go to state 8
+    IF              shift and go to state 9
+    WHILE           shift and go to state 10
 
-  ! PLUS            [ reduce using rule 14 (expression -> expression GT expression .) ]
-  ! MINUS           [ reduce using rule 14 (expression -> expression GT expression .) ]
-  ! TIMES           [ reduce using rule 14 (expression -> expression GT expression .) ]
-  ! DIVIDE          [ reduce using rule 14 (expression -> expression GT expression .) ]
-  ! EQ              [ shift and go to state 18 ]
-  ! NEQ             [ shift and go to state 19 ]
-  ! LE              [ shift and go to state 20 ]
-  ! GE              [ shift and go to state 21 ]
-  ! LT              [ shift and go to state 22 ]
-  ! GT              [ shift and go to state 23 ]
-  ! AND             [ shift and go to state 24 ]
-  ! OR              [ shift and go to state 25 ]
-
+    statements                     shift and go to state 40
+    statement                      shift and go to state 3
+    empty                          shift and go to state 4
+    assignment                     shift and go to state 5
+    if_statement                   shift and go to state 6
+    while_statement                shift and go to state 7
 
 state 39
 
-    (15) expression -> expression AND expression .
-    (5) expression -> expression . PLUS expression
-    (6) expression -> expression . MINUS expression
-    (7) expression -> expression . TIMES expression
-    (8) expression -> expression . DIVIDE expression
-    (9) expression -> expression . EQ expression
-    (10) expression -> expression . NEQ expression
-    (11) expression -> expression . LE expression
-    (12) expression -> expression . GE expression
-    (13) expression -> expression . LT expression
-    (14) expression -> expression . GT expression
-    (15) expression -> expression . AND expression
-    (16) expression -> expression . OR expression
+    (8) if_statement -> IF LPAREN expression RPAREN SCOPE statements . SCOPE else_block
 
-    SEMICOLON       reduce using rule 15 (expression -> expression AND expression .)
-    AND             reduce using rule 15 (expression -> expression AND expression .)
-    OR              reduce using rule 15 (expression -> expression AND expression .)
-    RPAREN          reduce using rule 15 (expression -> expression AND expression .)
-    PLUS            shift and go to state 14
-    MINUS           shift and go to state 15
-    TIMES           shift and go to state 16
-    DIVIDE          shift and go to state 17
-    EQ              shift and go to state 18
-    NEQ             shift and go to state 19
-    LE              shift and go to state 20
-    GE              shift and go to state 21
-    LT              shift and go to state 22
-    GT              shift and go to state 23
-
-  ! PLUS            [ reduce using rule 15 (expression -> expression AND expression .) ]
-  ! MINUS           [ reduce using rule 15 (expression -> expression AND expression .) ]
-  ! TIMES           [ reduce using rule 15 (expression -> expression AND expression .) ]
-  ! DIVIDE          [ reduce using rule 15 (expression -> expression AND expression .) ]
-  ! EQ              [ reduce using rule 15 (expression -> expression AND expression .) ]
-  ! NEQ             [ reduce using rule 15 (expression -> expression AND expression .) ]
-  ! LE              [ reduce using rule 15 (expression -> expression AND expression .) ]
-  ! GE              [ reduce using rule 15 (expression -> expression AND expression .) ]
-  ! LT              [ reduce using rule 15 (expression -> expression AND expression .) ]
-  ! GT              [ reduce using rule 15 (expression -> expression AND expression .) ]
-  ! AND             [ shift and go to state 24 ]
-  ! OR              [ shift and go to state 25 ]
+    SCOPE           shift and go to state 41
 
 
 state 40
 
-    (16) expression -> expression OR expression .
-    (5) expression -> expression . PLUS expression
-    (6) expression -> expression . MINUS expression
-    (7) expression -> expression . TIMES expression
-    (8) expression -> expression . DIVIDE expression
-    (9) expression -> expression . EQ expression
-    (10) expression -> expression . NEQ expression
-    (11) expression -> expression . LE expression
-    (12) expression -> expression . GE expression
-    (13) expression -> expression . LT expression
-    (14) expression -> expression . GT expression
-    (15) expression -> expression . AND expression
-    (16) expression -> expression . OR expression
+    (11) while_statement -> WHILE LPAREN expression RPAREN SCOPE statements . SCOPE
 
-    SEMICOLON       reduce using rule 16 (expression -> expression OR expression .)
-    OR              reduce using rule 16 (expression -> expression OR expression .)
-    RPAREN          reduce using rule 16 (expression -> expression OR expression .)
-    PLUS            shift and go to state 14
-    MINUS           shift and go to state 15
-    TIMES           shift and go to state 16
-    DIVIDE          shift and go to state 17
-    EQ              shift and go to state 18
-    NEQ             shift and go to state 19
-    LE              shift and go to state 20
-    GE              shift and go to state 21
-    LT              shift and go to state 22
-    GT              shift and go to state 23
-    AND             shift and go to state 24
-
-  ! PLUS            [ reduce using rule 16 (expression -> expression OR expression .) ]
-  ! MINUS           [ reduce using rule 16 (expression -> expression OR expression .) ]
-  ! TIMES           [ reduce using rule 16 (expression -> expression OR expression .) ]
-  ! DIVIDE          [ reduce using rule 16 (expression -> expression OR expression .) ]
-  ! EQ              [ reduce using rule 16 (expression -> expression OR expression .) ]
-  ! NEQ             [ reduce using rule 16 (expression -> expression OR expression .) ]
-  ! LE              [ reduce using rule 16 (expression -> expression OR expression .) ]
-  ! GE              [ reduce using rule 16 (expression -> expression OR expression .) ]
-  ! LT              [ reduce using rule 16 (expression -> expression OR expression .) ]
-  ! GT              [ reduce using rule 16 (expression -> expression OR expression .) ]
-  ! AND             [ reduce using rule 16 (expression -> expression OR expression .) ]
-  ! OR              [ shift and go to state 25 ]
+    SCOPE           shift and go to state 42
 
 
 state 41
 
-    (18) expression -> LPAREN expression RPAREN .
+    (8) if_statement -> IF LPAREN expression RPAREN SCOPE statements SCOPE . else_block
+    (9) else_block -> . ELSE SCOPE statements SCOPE
+    (10) else_block -> . empty
+    (22) empty -> .
 
-    SEMICOLON       reduce using rule 18 (expression -> LPAREN expression RPAREN .)
-    PLUS            reduce using rule 18 (expression -> LPAREN expression RPAREN .)
-    MINUS           reduce using rule 18 (expression -> LPAREN expression RPAREN .)
-    TIMES           reduce using rule 18 (expression -> LPAREN expression RPAREN .)
-    DIVIDE          reduce using rule 18 (expression -> LPAREN expression RPAREN .)
-    EQ              reduce using rule 18 (expression -> LPAREN expression RPAREN .)
-    NEQ             reduce using rule 18 (expression -> LPAREN expression RPAREN .)
-    LE              reduce using rule 18 (expression -> LPAREN expression RPAREN .)
-    GE              reduce using rule 18 (expression -> LPAREN expression RPAREN .)
-    LT              reduce using rule 18 (expression -> LPAREN expression RPAREN .)
-    GT              reduce using rule 18 (expression -> LPAREN expression RPAREN .)
-    AND             reduce using rule 18 (expression -> LPAREN expression RPAREN .)
-    OR              reduce using rule 18 (expression -> LPAREN expression RPAREN .)
-    RPAREN          reduce using rule 18 (expression -> LPAREN expression RPAREN .)
+    ELSE            shift and go to state 44
+    ID              reduce using rule 22 (empty -> .)
+    IF              reduce using rule 22 (empty -> .)
+    WHILE           reduce using rule 22 (empty -> .)
+    $end            reduce using rule 22 (empty -> .)
+    SCOPE           reduce using rule 22 (empty -> .)
 
+    else_block                     shift and go to state 43
+    empty                          shift and go to state 45
 
 state 42
 
-    (2) statement -> IF LPAREN expression RPAREN SCOPE . statements SCOPE
-    (3) statements -> . statement
-    (4) statements -> . statements statement
-    (1) statement -> . ID ASSIGN expression SEMICOLON
-    (2) statement -> . IF LPAREN expression RPAREN SCOPE statements SCOPE
+    (11) while_statement -> WHILE LPAREN expression RPAREN SCOPE statements SCOPE .
 
-    ID              shift and go to state 2
-    IF              shift and go to state 3
+    ID              reduce using rule 11 (while_statement -> WHILE LPAREN expression RPAREN SCOPE statements SCOPE .)
+    IF              reduce using rule 11 (while_statement -> WHILE LPAREN expression RPAREN SCOPE statements SCOPE .)
+    WHILE           reduce using rule 11 (while_statement -> WHILE LPAREN expression RPAREN SCOPE statements SCOPE .)
+    $end            reduce using rule 11 (while_statement -> WHILE LPAREN expression RPAREN SCOPE statements SCOPE .)
+    SCOPE           reduce using rule 11 (while_statement -> WHILE LPAREN expression RPAREN SCOPE statements SCOPE .)
 
-    statements                     shift and go to state 43
-    statement                      shift and go to state 44
 
 state 43
 
-    (2) statement -> IF LPAREN expression RPAREN SCOPE statements . SCOPE
-    (4) statements -> statements . statement
-    (1) statement -> . ID ASSIGN expression SEMICOLON
-    (2) statement -> . IF LPAREN expression RPAREN SCOPE statements SCOPE
+    (8) if_statement -> IF LPAREN expression RPAREN SCOPE statements SCOPE else_block .
 
-    SCOPE           shift and go to state 45
-    ID              shift and go to state 2
-    IF              shift and go to state 3
+    ID              reduce using rule 8 (if_statement -> IF LPAREN expression RPAREN SCOPE statements SCOPE else_block .)
+    IF              reduce using rule 8 (if_statement -> IF LPAREN expression RPAREN SCOPE statements SCOPE else_block .)
+    WHILE           reduce using rule 8 (if_statement -> IF LPAREN expression RPAREN SCOPE statements SCOPE else_block .)
+    $end            reduce using rule 8 (if_statement -> IF LPAREN expression RPAREN SCOPE statements SCOPE else_block .)
+    SCOPE           reduce using rule 8 (if_statement -> IF LPAREN expression RPAREN SCOPE statements SCOPE else_block .)
 
-    statement                      shift and go to state 46
 
 state 44
 
-    (3) statements -> statement .
+    (9) else_block -> ELSE . SCOPE statements SCOPE
 
-    SCOPE           reduce using rule 3 (statements -> statement .)
-    ID              reduce using rule 3 (statements -> statement .)
-    IF              reduce using rule 3 (statements -> statement .)
+    SCOPE           shift and go to state 46
 
 
 state 45
 
-    (2) statement -> IF LPAREN expression RPAREN SCOPE statements SCOPE .
+    (10) else_block -> empty .
 
-    $end            reduce using rule 2 (statement -> IF LPAREN expression RPAREN SCOPE statements SCOPE .)
-    SCOPE           reduce using rule 2 (statement -> IF LPAREN expression RPAREN SCOPE statements SCOPE .)
-    ID              reduce using rule 2 (statement -> IF LPAREN expression RPAREN SCOPE statements SCOPE .)
-    IF              reduce using rule 2 (statement -> IF LPAREN expression RPAREN SCOPE statements SCOPE .)
+    ID              reduce using rule 10 (else_block -> empty .)
+    IF              reduce using rule 10 (else_block -> empty .)
+    WHILE           reduce using rule 10 (else_block -> empty .)
+    $end            reduce using rule 10 (else_block -> empty .)
+    SCOPE           reduce using rule 10 (else_block -> empty .)
 
 
 state 46
 
-    (4) statements -> statements statement .
+    (9) else_block -> ELSE SCOPE . statements SCOPE
+    (2) statements -> . statement statements
+    (3) statements -> . empty
+    (4) statement -> . assignment
+    (5) statement -> . if_statement
+    (6) statement -> . while_statement
+    (22) empty -> .
+    (7) assignment -> . ID ASSIGN expression SEMICOLON
+    (8) if_statement -> . IF LPAREN expression RPAREN SCOPE statements SCOPE else_block
+    (11) while_statement -> . WHILE LPAREN expression RPAREN SCOPE statements SCOPE
 
-    SCOPE           reduce using rule 4 (statements -> statements statement .)
-    ID              reduce using rule 4 (statements -> statements statement .)
-    IF              reduce using rule 4 (statements -> statements statement .)
+    SCOPE           reduce using rule 22 (empty -> .)
+    ID              shift and go to state 8
+    IF              shift and go to state 9
+    WHILE           shift and go to state 10
+
+    statements                     shift and go to state 47
+    statement                      shift and go to state 3
+    empty                          shift and go to state 4
+    assignment                     shift and go to state 5
+    if_statement                   shift and go to state 6
+    while_statement                shift and go to state 7
+
+state 47
+
+    (9) else_block -> ELSE SCOPE statements . SCOPE
+
+    SCOPE           shift and go to state 48
+
+
+state 48
+
+    (9) else_block -> ELSE SCOPE statements SCOPE .
+
+    ID              reduce using rule 9 (else_block -> ELSE SCOPE statements SCOPE .)
+    IF              reduce using rule 9 (else_block -> ELSE SCOPE statements SCOPE .)
+    WHILE           reduce using rule 9 (else_block -> ELSE SCOPE statements SCOPE .)
+    $end            reduce using rule 9 (else_block -> ELSE SCOPE statements SCOPE .)
+    SCOPE           reduce using rule 9 (else_block -> ELSE SCOPE statements SCOPE .)
 

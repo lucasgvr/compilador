@@ -206,12 +206,12 @@ def verificar_tokens(tokens):
             return
     print("aceita")
 
-entrada1 = "int var = 1234; var = 0; if(var > 1 && false){ var = var + 2; }"
+entrada1 = "int var = 1234; var = 0; if(var > 1 && false){ var = var + 2; } true"
 entrada2 = "int var = 1234; var = ; fi(var > 1{ var = + 2; }"
 entrada3 = "int var = 1234: var = 0; if(var > 1 & false){ var = var ^ 2; }"
 entrada4 = "int teste}{var = 3 ; teste} 123 #"
 
-tokens = analise_lexica(entrada4)
+tokens = analise_lexica(entrada1)
 analisar_tokens_desconhecidos(tokens)
 
 variaveis_info = extrair_variaveis_info(tokens)
